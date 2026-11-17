@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROMUN'26 — Riphah Model United Nations | Inaugural Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            editorial: ['Cormorant Garamond', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            burgundy: {
+              950: '#160407',
+              900: '#24070C',
+              850: '#310A11',
+              800: '#450E18',
+              700: '#5E1320',
+              600: '#7D192B',
+            },
+            parchment: {
+              50: '#FDFBF8',
+              100: '#F7EFE6',
+              200: '#EFE1D1',
+              300: '#E2CCB5',
+              400: '#C9AA8B',
+            },
+            gold: {
+              300: '#F0D7A7',
+              400: '#D8B372',
+              500: '#B88D46',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg-dark: #1A0508;
+      --bg-maroon: #360B13;
+      --parchment: #F6EDE4;
+      --gold: #D8B372;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--parchment);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Paper Grain & Editorial Watermark Texture */
+    .grain-overlay {
+      background-image: radial-gradient(rgba(216, 179, 114, 0.08) 1px, transparent 0),
+                        radial-gradient(rgba(246, 237, 228, 0.04) 1px, transparent 0);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+    }
+
+    .watermark-text {
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(246, 237, 228, 0.045);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .watermark-text-light {
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(69, 14, 24, 0.07);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .hero-gradient {
+      background:
+        radial-gradient(circle at 50% 18%, rgba(125, 25, 43, 0.52) 0%, rgba(36, 7, 12, 0.85) 55%, #160407 100%);
+    }
+
+    .glass-card-maroon {
+      background: linear-gradient(145deg, rgba(69, 14, 24, 0.58) 0%, rgba(28, 6, 10, 0.82) 100%);
+      border: 1px solid rgba(216, 179, 114, 0.22);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .parchment-card {
+      background: linear-gradient(160deg, #FAF4ED 0%, #EFE1D1 100%);
+      color: #2B080E;
+      border: 1px solid rgba(94, 19, 32, 0.18);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .maroon-council-card {
+      background: linear-gradient(160deg, #4A0F1A 0%, #26070D 100%);
+      color: #F7EFE6;
+      border: 1px solid rgba(216, 179, 114, 0.28);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .card-hover {
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.32s ease, box-shadow 0.32s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      border-color: rgba(216, 179, 114, 0.55);
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-parchment {
+      background: linear-gradient(135deg, #FAF4ED 0%, #EAD7C3 100%);
+      color: #2B080E;
+      border: 1px solid rgba(216, 179, 114, 0.6);
+      transition: all 0.25s ease;
+    }
+
+    .btn-parchment:hover {
+      background: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(246, 237, 228, 0.22);
+    }
+
+    .btn-outline-maroon {
+      background: rgba(69, 14, 24, 0.45);
+      color: #F7EFE6;
+      border: 1px solid rgba(216, 179, 114, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn-outline-maroon:hover {
+      background: rgba(125, 25, 43, 0.65);
+      border-color: #D8B372;
+      transform: translateY(-2px);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .animate-float {
+      animation: floatSlow 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-burgundy-700 selection:text-parchment-100">
+
+  <!-- Background Repeated Watermark Pattern -->
+  <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none flex flex-col justify-between opacity-75">
+    <div class="watermark-text text-[7rem] md:text-[11rem] leading-none whitespace-nowrap -ml-10">ROMUN'26 • ROMUN'26 • ROMUN'26</div>
+    <div class="watermark-text text-[7rem] md:text-[11rem] leading-none whitespace-nowrap ml-12">RIPHAH • ATTOCK • DIPLOMACY</div>
+    <div class="watermark-text text-[7rem] md:text-[11rem] leading-none whitespace-nowrap -ml-6">ROMUN'26 • FIRST EDITION</div>
+    <div class="watermark-text text-[7rem] md:text-[11rem] leading-none whitespace-nowrap ml-8">SOARING TOWARDS EXCELLENCE</div>
+  </div>
+
+  <!-- Navbar -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b border-gold-400/15 bg-burgundy-950/80 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-3.5 group">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-burgundy-700 to-burgundy-950 border border-gold-400/40 flex items-center justify-center shadow-lg group-hover:border-gold-400 transition">
+          <!-- Custom Phoenix / Laurel Emblem SVG -->
+          <svg class="w-6 h-6 text-parchment-100" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 44C10 37 9 26 14 17C13 24 15 31 20 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M48 44C54 37 55 26 50 17C51 24 49 31 44 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M32 12L36 24L48 22L38 31L43 44L32 36L21 44L26 31L16 22L28 24L32 12Z" fill="currentColor" fill-opacity="0.9"/>
+            <path d="M22 49C26 52 38 52 42 49" stroke="#D8B372" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-serif font-bold text-lg tracking-wider text-parchment-50 leading-none">
+            ROMUN<span class="text-gold-400">'26</span>
+          </div>
+          <div class="text-[10px] tracking-[0.26em] uppercase text-parchment-300/80 mt-1">
+            Inaugural Edition
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-parchment-200/85">
+        <a href="#home" class="hover:text-gold-300 transition">Home</a>
+        <a href="#about" class="hover:text-gold-300 transition">About</a>
+        <a href="#councils" class="hover:text-gold-300 transition">Councils & Agendas</a>
+        <a href="#scale" class="hover:text-gold-300 transition">Scale</a>
+        <a href="#socials" class="hover:text-gold-300 transition">Socials</a>
+      </nav>
+
+      <!-- Instagram CTA + Mobile Menu Toggle -->
+      <div class="flex items-center gap-3">
+        <a href="https://www.instagram.com/romun__26?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw=="
+           target="_blank"
+           rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-wide btn-outline-maroon">
+          <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          <span>@romun__26</span>
+        </a>
+
+        <button id="mobileMenuBtn" aria-label="Toggle navigation" class="md:hidden p-2 rounded-lg border border-gold-400/25 text-parchment-100 hover:bg-burgundy-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobileMenu" class="hidden md:hidden bg-burgundy-950/95 border-b border-gold-400/20 px-6 py-4 space-y-3">
+      <a href="#home" class="block py-1.5 text-sm text-parchment-100 hover:text-gold-400">Home</a>
+      <a href="#about" class="block py-1.5 text-sm text-parchment-100 hover:text-gold-400">About First Edition</a>
+      <a href="#councils" class="block py-1.5 text-sm text-parchment-100 hover:text-gold-400">Councils & Agendas</a>
+      <a href="#scale" class="block py-1.5 text-sm text-parchment-100 hover:text-gold-400">Conference Scale</a>
+      <a href="#socials" class="block py-1.5 text-sm text-parchment-100 hover:text-gold-400">Socials & Gala</a>
+    </div>
+  </header>
+
+  <!-- 1. HERO SECTION -->
+  <section id="home" class="relative z-10 min-h-screen flex items-center justify-center pt-28 pb-20 px-4 sm:px-6 hero-gradient grain-overlay">
+    <div class="max-w-5xl mx-auto text-center">
+      <!-- Top Pill Badge -->
+      <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-burgundy-800/70 border border-gold-400/35 text-xs font-semibold tracking-[0.22em] uppercase text-gold-300 mb-7 shadow-md">
+        <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+        <span>✦ Herald of Diplomacy • Get Ready Attock ✦</span>
+      </div>
+
+      <!-- Crest Icon -->
+      <div class="mx-auto w-20 h-20 mb-5 rounded-full bg-burgundy-900/80 border border-gold-400/35 flex items-center justify-center shadow-2xl animate-float">
+        <svg class="w-11 h-11 text-parchment-100" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 45C8 37 7 25 13 15C12 23 14 31 19 37" stroke="#D8B372" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M50 45C56 37 57 25 51 15C52 23 50 31 45 37" stroke="#D8B372" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 10L36.5 23.5L50 21.5L39 31.5L44 45L32 36.5L20 45L25 31.5L14 21.5L27.5 23.5L32 10Z" fill="#F7EFE6"/>
+          <path d="M21 51C26 54.5 38 54.5 43 51" stroke="#D8B372" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="font-serif font-extrabold text-5xl sm:text-7xl md:text-8xl tracking-tight text-parchment-50 drop-shadow-[0_6px_24px_rgba(0,0,0,0.65)]">
+        ROMUN<span class="text-gold-400">'26</span>
+      </h1>
+      <p class="font-serif text-lg sm:text-2xl md:text-3xl tracking-[0.28em] uppercase text-parchment-200 mt-3 font-semibold">
+        First Edition • Inaugural Summit
+      </p>
+
+      <!-- Subtitle -->
+      <p class="max-w-2xl mx-auto mt-6 text-base sm:text-lg text-parchment-200/85 leading-relaxed font-normal">
+        Riphah Model United Nations 2026. Igniting a new era of diplomatic discourse, strategic negotiation, and principled leadership in Attock.
+      </p>
+
+      <!-- Info Cards: Dates & Venue -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mt-10 text-left">
+        <div class="glass-card-maroon rounded-2xl p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-burgundy-800/90 border border-gold-400/30 flex items-center justify-center shrink-0 text-gold-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-[11px] font-bold tracking-[0.2em] uppercase text-gold-300/85">Conference Dates</div>
+            <div class="font-serif font-bold text-base sm:text-lg text-parchment-50 mt-0.5">2026 • Dates Revealing Soon</div>
+          </div>
+        </div>
+
+        <div class="glass-card-maroon rounded-2xl p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-burgundy-800/90 border border-gold-400/30 flex items-center justify-center shrink-0 text-gold-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-[11px] font-bold tracking-[0.2em] uppercase text-gold-300/85">Official Venue</div>
+            <div class="font-serif font-bold text-base sm:text-lg text-parchment-50 mt-0.5">Riphah College, Attock</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+        <button id="regSoonBtn"
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm tracking-wide btn-parchment shadow-xl cursor-pointer">
+          <svg class="w-4 h-4 text-burgundy-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Registration Opening Soon — Stay Tuned</span>
+        </button>
+
+        <a href="https://www.instagram.com/romun__26?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw=="
+           target="_blank"
+           rel="noopener noreferrer"
+           class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm tracking-wide btn-outline-maroon">
+          <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          <span>View Instagram Page</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ABOUT SECTION (1ST EDITION — NO LEGACY CLAIMS) -->
+  <section id="about" class="relative z-10 py-20 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto reveal">
+      <div class="glass-card-maroon rounded-3xl p-8 sm:p-12 lg:p-14 border border-gold-400/25">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <!-- Left Narrative -->
+          <div class="lg:col-span-7">
+            <div class="text-xs font-bold tracking-[0.25em] uppercase text-gold-400 mb-3">
+              Welcome to ROMUN'26 • The Inaugural Chapter
+            </div>
+            <h2 class="font-serif font-bold text-3xl sm:text-4xl lg:text-[2.65rem] leading-tight text-parchment-50 uppercase">
+              A New Standard of Diplomatic Rigor
+            </h2>
+            <p class="mt-5 text-parchment-200/85 text-base leading-relaxed">
+              Launching its historic <span class="text-gold-300 font-semibold">First Edition</span> at <span class="text-parchment-50 font-semibold">Riphah College, Attock</span>, Riphah Model United Nations 2026 sets a bold benchmark for parliamentary debate, crisis diplomacy, and youth leadership. Built from the ground up for sharp thinkers and emerging statesmen, ROMUN'26 brings high-stakes international and national agendas to the forefront.
+            </p>
+            <div class="mt-7 flex flex-wrap items-center gap-6 text-xs sm:text-sm font-semibold text-parchment-100">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+                <span>Parliamentary Precision</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+                <span>High-Stakes Agendas</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+                <span>Inaugural Edition 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Stat Grid -->
+          <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+            <div class="rounded-2xl bg-burgundy-950/75 border border-gold-400/25 p-6 text-center">
+              <div class="font-serif font-extrabold text-4xl sm:text-5xl text-parchment-50">6</div>
+              <div class="text-[11px] font-bold tracking-[0.2em] uppercase text-gold-300/85 mt-2">Specialized Councils</div>
+            </div>
+            <div class="rounded-2xl bg-burgundy-950/75 border border-gold-400/25 p-6 text-center">
+              <div class="font-serif font-extrabold text-4xl sm:text-5xl text-parchment-50">3</div>
+              <div class="text-[11px] font-bold tracking-[0.2em] uppercase text-gold-300/85 mt-2">Days of Debate</div>
+            </div>
+            <div class="col-span-2 rounded-2xl bg-gradient-to-r from-burgundy-900/90 to-burgundy-950/90 border border-gold-400/30 p-6 text-center">
+              <div class="font-serif font-extrabold text-4xl sm:text-5xl text-gold-300">100%</div>
+              <div class="text-[11px] font-bold tracking-[0.22em] uppercase text-parchment-200 mt-2">Immersive Statecraft & Diplomacy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SPECIALIZED COUNCILS & AGENDAS (FROM INSTAGRAM POSTS) -->
+  <section id="councils" class="relative z-10 py-20 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto reveal">
+        <div class="text-xs font-bold tracking-[0.28em] uppercase text-gold-400 mb-3">
+          Chambers of Debate • Official Agendas
+        </div>
+        <h2 class="font-serif font-extrabold text-3xl sm:text-5xl text-parchment-50 uppercase tracking-wide">
+          Committees & Agendas
+        </h2>
+        <p class="mt-4 text-parchment-200/80 text-sm sm:text-base leading-relaxed">
+          Explore our six meticulously curated committees engineered to test strategic negotiation, bilingual crisis response, and resolution drafting.
+        </p>
+      </div>
+
+      <!-- Filter Pills & Search Bar -->
+      <div class="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 reveal">
+        <div id="filterGroup" class="flex flex-wrap items-center justify-center gap-2">
+          <button data-filter="all" class="filter-btn active px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-parchment-100 text-burgundy-950 border border-gold-400 transition cursor-pointer">
+            All Councils (6)
+          </button>
+          <button data-filter="global" class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-burgundy-900/70 text-parchment-200 border border-gold-400/25 hover:border-gold-400 transition cursor-pointer">
+            Global & UN
+          </button>
+          <button data-filter="national" class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-burgundy-900/70 text-parchment-200 border border-gold-400/25 hover:border-gold-400 transition cursor-pointer">
+            National & Crisis
+          </button>
+        </div>
+
+        <div class="relative w-full md:w-72">
+          <svg class="w-4 h-4 text-gold-400/70 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input id="councilSearch"
+                 type="text"
+                 placeholder="Search committee or agenda..."
+                 class="w-full pl-10 pr-4 py-2.5 rounded-full bg-burgundy-900/75 border border-gold-400/25 text-xs text-parchment-100 placeholder-parchment-300/50 focus:outline-none focus:border-gold-400 transition" />
+        </div>
+      </div>
+
+      <!-- Councils Grid (Alternating Burgundy & Warm Parchment Editorial Style) -->
+      <div id="councilsGrid" class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Cards injected via JS for clean filtering + modal preview -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CONFERENCE SCALE (DIRECTLY AFTER COUNCILS, NO PAST/ASCENSION SECTION) -->
+  <section id="scale" class="relative z-10 py-20 px-4 sm:px-6 border-t border-gold-400/10">
+    <div class="max-w-6xl mx-auto text-center reveal">
+      <div class="text-xs font-bold tracking-[0.28em] uppercase text-gold-400 mb-3">
+        Reach & Footprint
+      </div>
+      <h2 class="font-serif font-extrabold text-3xl sm:text-5xl text-parchment-50 uppercase tracking-wide">
+        Conference Scale
+      </h2>
+      <p class="max-w-2xl mx-auto mt-4 text-parchment-200/80 text-sm sm:text-base">
+        ROMUN'26 || First Edition stands as a monumental gathering point at Riphah College for upcoming diplomats, debaters, and thought leaders.
+      </p>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card-maroon rounded-2xl p-8 card-hover">
+          <div class="font-serif font-extrabold text-5xl sm:text-6xl text-parchment-50">400+</div>
+          <div class="font-bold text-base text-gold-300 mt-3">Total Participants</div>
+          <p class="text-xs text-parchment-200/75 mt-1.5">Delegates, Observers & Secretariat Members</p>
+        </div>
+
+        <div class="glass-card-maroon rounded-2xl p-8 card-hover border-gold-400/40">
+          <div class="font-serif font-extrabold text-5xl sm:text-6xl text-gold-300">250+</div>
+          <div class="font-bold text-base text-parchment-50 mt-3">Delegates</div>
+          <p class="text-xs text-parchment-200/75 mt-1.5">Debating Across 6 Specialized Councils</p>
+        </div>
+
+        <div class="glass-card-maroon rounded-2xl p-8 card-hover">
+          <div class="font-serif font-extrabold text-5xl sm:text-6xl text-parchment-50">150+</div>
+          <div class="font-bold text-base text-gold-300 mt-3">Observers & Guests</div>
+          <p class="text-xs text-parchment-200/75 mt-1.5">Engaging in Sessions, Workshops & Socials</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. SOCIAL MUSICAL NIGHT & GALA EVENTS (TO BE DISCOVERED) -->
+  <section id="socials" class="relative z-10 py-20 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto reveal">
+      <div class="relative overflow-hidden rounded-3xl glass-card-maroon p-10 sm:p-16 text-center border border-gold-400/35">
+        <!-- Decorative Watermark Inside Card -->
+        <div class="watermark-text text-6xl sm:text-8xl absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-60">
+          ROMUN'26 SOCIALS
+        </div>
+
+        <div class="relative z-10">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-burgundy-950/80 border border-gold-400/35 text-[11px] font-bold tracking-[0.24em] uppercase text-gold-300 mb-5">
+            <span>✦ To Be Discovered ✦</span>
+          </div>
+
+          <h2 class="font-serif font-extrabold text-3xl sm:text-5xl text-parchment-50 uppercase tracking-wide leading-tight">
+            Social Musical Night & Gala Events
+          </h2>
+
+          <p class="mt-4 text-xs sm:text-sm font-bold tracking-[0.22em] uppercase text-gold-300/90">
+            To Be Discovered • Revealing Soon! Stay Tuned For Exclusive Updates.
+          </p>
+
+          <p class="max-w-xl mx-auto mt-4 text-sm text-parchment-200/80 leading-relaxed">
+            Beyond the committee chambers, unforgettable evenings of live music, cultural performances, and the grand diplomatic gala await delegates. Follow our official Instagram for the big reveal.
+          </p>
+
+          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="https://www.instagram.com/romun__26?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw=="
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest btn-parchment">
+              <svg class="w-4 h-4 text-burgundy-800" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              <span>Visit ROMUN Instagram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t border-gold-400/20 bg-burgundy-950/95 py-10 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-parchment-300/80">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-burgundy-800 border border-gold-400/35 flex items-center justify-center font-serif font-bold text-parchment-50">
+          R
+        </div>
+        <span class="font-serif font-bold tracking-wider text-parchment-100 uppercase">
+          ROMUN'26 || Riphah College, Attock
+        </span>
+      </div>
+
+      <div class="text-center">
+        © 2026 ROMUN'26 — First Edition. All Rights Reserved.
+      </div>
+
+      <a href="https://www.instagram.com/romun__26?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw=="
+         target="_blank"
+         rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-full btn-outline-maroon font-semibold text-parchment-100">
+        <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        <span>Instagram (@romun__26)</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- MODAL FOR REGISTRATION SOON / COMMITTEE AGENDA DETAILS -->
+  <div id="infoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+    <div class="glass-card-maroon max-w-lg w-full rounded-3xl p-7 sm:p-9 border border-gold-400/40 relative shadow-2xl">
+      <button id="closeModalBtn" aria-label="Close modal" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-burgundy-900 border border-gold-400/30 flex items-center justify-center text-parchment-200 hover:text-gold-400 cursor-pointer">
+        ✕
+      </button>
+      <div id="modalBadge" class="inline-block px-3 py-1 rounded-full bg-burgundy-800 border border-gold-400/30 text-[11px] font-bold uppercase tracking-widest text-gold-300 mb-3">
+        ROMUN'26 Update
+      </div>
+      <h3 id="modalTitle" class="font-serif font-bold text-2xl sm:text-3xl text-parchment-50">
+        Registration Opening Soon
+      </h3>
+      <p id="modalBody" class="mt-3 text-sm sm:text-base text-parchment-200/85 leading-relaxed">
+        Delegate and delegation registrations for ROMUN'26 at Riphah College, Attock will open shortly. Follow @romun__26 on Instagram to be notified the moment applications go live!
+      </p>
+      <div class="mt-7 flex flex-col sm:flex-row gap-3">
+        <a href="https://www.instagram.com/romun__26?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw=="
+           target="_blank"
+           rel="noopener noreferrer"
+           class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider btn-parchment">
+          <span>Follow @romun__26 on Instagram</span>
+        </a>
+        <button id="modalDismissBtn" class="px-5 py-3 rounded-xl font-semibold text-xs uppercase tracking-wider btn-outline-maroon cursor-pointer">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const INSTAGRAM_URL = "https://www.instagram.com/romun__26?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw==";
+
+    const councils = [
+      {
+        code: "UNCSW",
+        tag: "Equity & Advocacy",
+        category: "global",
+        theme: "parchment",
+        name: "United Nations Commission on the Status of Women",
+        agenda: "Addressing Gender-Based Violence Through Stronger Legal Frameworks and Access to Justice for Women."
+      },
+      {
+        code: "HBCC",
+        tag: "Bilingual Crisis",
+        category: "national",
+        theme: "maroon",
+        name: "Historical Bilingual Crisis Committee",
+        agenda: "Operation Silence: The Lal Masjid — Navigating Domestic Security, State Sovereignty, and Historical Crisis Diplomacy."
+      },
+      {
+        code: "UNHRC",
+        tag: "Human Rights",
+        category: "global",
+        theme: "parchment",
+        name: "United Nations Human Rights Council",
+        agenda: "Freedom of Expression in the Digital Age: Balancing Human Rights and State Security."
+      },
+      {
+        code: "PNA",
+        tag: "National Chamber",
+        category: "national",
+        theme: "maroon",
+        name: "Pakistan National Assembly",
+        agenda: "Reassessing the 18th Constitutional Amendment: Federal Authority vs Provincial Autonomy."
+      },
+      {
+        code: "UNSC",
+        tag: "Global Peace",
+        category: "global",
+        theme: "parchment",
+        name: "United Nations Security Council",
+        agenda: "Addressing the Humanitarian Crisis and Threats to International Peace in Sudan."
+      },
+      {
+        code: "DISEC",
+        tag: "Disarmament",
+        category: "global",
+        theme: "maroon",
+        name: "Disarmament & International Security Committee",
+        agenda: "Curbing Autonomous Weapons Systems and Proliferation Risks in Modern Asymmetric Warfare."
+      }
+    ];
+
+    const grid = document.getElementById("councilsGrid");
+    const searchInput = document.getElementById("councilSearch");
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    let activeFilter = "all";
+
+    function renderCouncils() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = councils.filter(c => {
+        const matchesCat = activeFilter === "all" || c.category === activeFilter;
+        const matchesSearch =
+          c.code.toLowerCase().includes(query) ||
+          c.name.toLowerCase().includes(query) ||
+          c.agenda.toLowerCase().includes(query) ||
+          c.tag.toLowerCase().includes(query);
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full glass-card-maroon rounded-2xl p-10 text-center">
+            <p class="font-serif text-xl text-parchment-100">No councils match your search.</p>
+            <p class="text-xs text-parchment-300 mt-2">Try clearing the filter or searching another committee code.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(c => {
+        const isParchment = c.theme === "parchment";
+        const cardClass = isParchment ? "parchment-card" : "maroon-council-card";
+        const badgeClass = isParchment
+          ? "bg-burgundy-800 text-parchment-50 border border-burgundy-700"
+          : "bg-burgundy-950/80 text-gold-300 border border-gold-400/35";
+        const tagClass = isParchment ? "text-burgundy-700" : "text-gold-300/80";
+        const titleClass = isParchment ? "text-burgundy-950" : "text-parchment-50";
+        const agendaBoxClass = isParchment
+          ? "bg-burgundy-900/5 border-burgundy-800/20 text-burgundy-900"
+          : "bg-burgundy-950/65 border-gold-400/20 text-parchment-200";
+        const agendaLabelClass = isParchment ? "text-burgundy-700" : "text-gold-400";
+        const btnClass = isParchment
+          ? "bg-burgundy-800 text-parchment-50 hover:bg-burgundy-900"
+          : "btn-parchment";
+
+        return `
+          <article class="${cardClass} rounded-2xl p-6 sm:p-7 flex flex-col justify-between card-hover relative overflow-hidden">
+            <div class="${isParchment ? 'watermark-text-light' : 'watermark-text'} text-6xl absolute -bottom-3 -right-2">
+              ${c.code}
+            </div>
+            <div class="relative z-10">
+              <div class="flex items-center justify-between gap-2 mb-4">
+                <span class="px-3.5 py-1 rounded-full text-xs font-extrabold tracking-widest ${badgeClass}">
+                  ${c.code}
+                </span>
+                <span class="text-[11px] font-bold tracking-[0.18em] uppercase ${tagClass}">
+                  ${c.tag}
+                </span>
+              </div>
+
+              <h3 class="font-serif font-bold text-xl leading-snug ${titleClass}">
+                ${c.name}
+              </h3>
+
+              <div class="mt-4 p-4 rounded-xl border ${agendaBoxClass}">
+                <div class="text-[10px] font-extrabold tracking-[0.22em] uppercase ${agendaLabelClass} mb-1">
+                  Committee Agenda
+                </div>
+                <p class="text-xs sm:text-[13px] leading-relaxed font-medium">
+                  ${c.agenda}
+                </p>
+              </div>
+            </div>
+
+            <div class="relative z-10 mt-6 pt-2 flex items-center gap-2.5">
+              <button onclick="openCouncilModal('${c.code}')"
+                      class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer ${btnClass}">
+                Registration Opening Soon
+              </button>
+              <a href="${INSTAGRAM_URL}"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 title="View on Instagram"
+                 class="p-2.5 rounded-xl border ${isParchment ? 'border-burgundy-800/30 text-burgundy-800 hover:bg-burgundy-800 hover:text-parchment-50' : 'border-gold-400/30 text-gold-300 hover:bg-burgundy-800'} transition">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    // Filter Buttons
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => {
+          b.classList.remove("bg-parchment-100", "text-burgundy-950", "border-gold-400");
+          b.classList.add("bg-burgundy-900/70", "text-parchment-200", "border-gold-400/25");
+        });
+        btn.classList.remove("bg-burgundy-900/70", "text-parchment-200", "border-gold-400/25");
+        btn.classList.add("bg-parchment-100", "text-burgundy-950", "border-gold-400");
+        activeFilter = btn.dataset.filter;
+        renderCouncils();
+      });
+    });
+
+    searchInput.addEventListener("input", renderCouncils);
+
+    // Modal Logic
+    const modal = document.getElementById("infoModal");
+    const modalBadge = document.getElementById("modalBadge");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+
+    function openModal(badge, title, body) {
+      modalBadge.textContent = badge;
+      modalTitle.textContent = title;
+      modalBody.textContent = body;
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    window.openCouncilModal = function(code) {
+      const c = councils.find(item => item.code === code);
+      if (!c) return;
+      openModal(
+        `${c.code} • ${c.tag}`,
+        `${c.name}`,
+        `Agenda: "${c.agenda}" — Delegate registrations for ${c.code} at ROMUN'26 (Riphah College, Attock) are opening soon. Follow @romun__26 on Instagram to secure your country allocation first!`
+      );
+    };
+
+    document.getElementById("regSoonBtn").addEventListener("click", () => {
+      openModal(
+        "ROMUN'26 • First Edition",
+        "Registration Opening Soon — Stay Tuned",
+        "Applications for Individual Delegates, Institutional Delegations, and Observers at Riphah College, Attock will launch soon. Stay tuned to @romun__26 on Instagram for early-bird announcements."
+      );
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+    document.getElementById("modalDismissBtn").addEventListener("click", closeModal);
+    modal.addEventListener("click", e => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    mobileMenuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
+    });
+    mobileMenu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+    });
+
+    // Scroll Reveal Observer
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    // Initial Render
+    renderCouncils();
+  </script>
+</body>
+</html>
